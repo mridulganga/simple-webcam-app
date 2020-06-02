@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Display Webcam Stream</title>
+
+    <style>
+        #container {
+            margin: 0px auto;
+            width: 500px;
+        }
+
+        #videoElement {
+            width: 500px;
+            height: 375px;
+            background-color: #666;
+        }
+
+        button {
+            background: #eee;
+            color: #333;
+            border: 0;
+            padding: 10px;
+        }
+
+        #start {
+            background-color: #3498db;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <video autoplay="true" id="videoElement">
+
+        </video>
+    </div>
+
+    <div id="container">
+
+
+        <button id="start" onclick="startVideo()">Start</button>
+        <button id="stop" onclick="stopVideo()">Stop</button>
+    </div>
+
+    <script>
+        var video = document.querySelector("#videoElement");
+
+        let constraints = {
+            video: {
+                mediaSource: "screen"
+            }
+        };
+
+        function startVideo() {
+            
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(mediaStream => {
+                    video.srcObject = mediaStream;
+                }).catch(function (e) {
+                    console.log("Something went wrong! " + e);
+                });;
+            
+        }
+
+        function stopVideo() {
+            var stream = video.srcObject;
+            var tracks = stream.getTracks();
+
+            for (var i = 0; i < tracks.length; i++) {
+                var track = tracks[i];
+                track.stop();
+            }
+
+            video.srcObject = null;
+        }
+
+    </script>
+</body>
+
+</html>
